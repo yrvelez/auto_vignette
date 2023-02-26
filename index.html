@@ -1,0 +1,246 @@
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+            /* Center the form on the page */
+      .form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+          
+      }
+     
+    
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 40%;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 10px;
+  }
+    
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-size: 18px;
+      min-font-size: 16px;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      font-family: "Inter", sans-serif;
+    }
+    .output-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .output-box {
+      width: 100%;
+      height: 300px;
+        background-color: #E6D0F2;
+                color: #fff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      border-radius: 10px;
+      margin: 20px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .output-title {
+      font-family: "Nunito", sans-serif;
+      font-weight: bold;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+    
+      #outputTreatment, #outputControl {
+    padding: 10px;
+    flex: 1;
+  }
+  
+    .output-text {
+      font-family: "Inter", sans-serif;
+      font-size: 18px;
+      color: #000;
+      text-align: center;
+      line-height: 1.5;
+     overflow-y: scroll;
+    }
+    
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: linear-gradient(to bottom, #333, #222);
+      border: none;
+      color: #fff;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+        input[type="submit"]:hover {
+          transform: scale(1.1);
+        }
+
+      /* Style for the header */
+        h1 {
+          text-align: center;
+          font-family: "Nunito", sans-serif;
+          text-transform: uppercase;
+          color: #fff;
+          letter-spacing: 2px;
+          margin-bottom: 0px;
+          text-shadow: 2px 2px #aaa;
+        }
+        header {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 50px;
+        }
+          .header-banner {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+  }
+
+  .header-banner img {
+    width: 100%;
+    max-width: 500px;
+  }
+        
+        .logo {
+          font-family: "Orbitron", sans-serif;
+          font-size: 36px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+        }
+        
+        @media (max-width: 768px) {
+              .form-container {
+                padding: 10px;
+              }
+              
+              form {
+                      width: 90%;
+              }
+            
+              textarea {
+                height: 150px;
+              }
+            
+              .output-box {
+                height: 200px;
+                padding: 0;
+              }
+            }
+            
+                  body {
+        background-color: #7a4397;
+      }
+            
+            
+      /* Add the Open Sans font */
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+    </style>
+    <!-- Add a link to the Open Sans font -->
+    <!-- Include the jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    
+    $(document).ready(function() {
+      // Submit form data to the PHP script using AJAX
+      $("form").submit(function(e) {
+        e.preventDefault();
+        $("#loading").show();
+        $.ajax({
+          type: "POST",
+          url: "process_text.php",
+          data: $("form").serialize(),
+          dataType: "json",
+          success: function(data) {
+              $("#loading").hide();
+            var data = JSON.parse(data);
+          	console.log(data);
+            var treatment = data.treatment;
+            var control = data.control;
+            
+            var treatmentWords = treatment.split(" ");
+            var controlWords = control.split(" ");
+            var outputTreatment = "";
+            var outputControl = "";
+            
+            for (var i = 0; i < treatmentWords.length; i++) {
+              if (treatmentWords[i] === controlWords[i]) {
+                outputTreatment += treatmentWords[i] + " ";
+              } else {
+                outputTreatment += "<span style='color: purple;'>" + treatmentWords[i] + " </span>";
+              }
+            }
+            
+            for (var i = 0; i < controlWords.length; i++) {
+              if (treatmentWords[i] === controlWords[i]) {
+                outputControl += controlWords[i] + " ";
+              } else {
+                outputControl += "<span style='color: blue;'>" + controlWords[i] + " </span>";
+              }
+            }
+            
+            $("#outputTreatment").html(outputTreatment);
+            $("#outputControl").html(outputControl);
+
+          },
+          error: function(xhr, status, error) {
+               $("#loading").hide();
+            console.error(error);
+            $("#outputTreatment").html("An error occurred: " + error);
+            $("#outputControl").html("An error occurred: " + error);
+          }
+        });
+      });
+    });
+    </script>
+  </head>
+    <body>
+      <!-- Header -->
+      <div class="header-banner">
+  <h1></h1>
+  <title>Auto-Vignette</title>
+</div>
+      <div class="form-container">
+  <form action="process_text.php" method="post">
+    <textarea name="text_input" placeholder="Describe your design (e.g., a study about whether stereotypes about deservingness affect social welfare attitudes)."></textarea>
+    <input type="text" id="api-key" name="api_key" placeholder="OpenAI API Key">
+     <div id="loading" style="display:none;">
+        <img src="https://usagif.com/wp-content/uploads/loading-6.gif.webp" height="30" alt="Loading..." />
+      </div>
+    <input type="submit" value="Submit">
+  </form>
+  <div class="output-section">
+    <div class="output-box">
+      <div class="output-title">Treatment</div>
+      <div class="output-text" id="outputTreatment"></div>
+    </div>
+    <div class="output-box">
+      <div class="output-title">Control</div>
+      <div class="output-text" id="outputControl"></div>
+    </div>
+  </div>
+</div>
+
+    </body>
+</html>
