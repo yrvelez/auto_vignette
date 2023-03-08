@@ -1,3 +1,5 @@
+<h1>Auto-Vignette Experiment</h1>
+
 This PHP script is designed to generate survey experiments using OpenAI's GPT-3 language model. The script takes a text input and an API key as input, and returns a two-arm survey experiment.
 
 **How to Use**
