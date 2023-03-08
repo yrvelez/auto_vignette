@@ -14,4 +14,5 @@ The completed survey experiment is generated using OpenAI's GPT-3 API. The max_t
 This script requires PHP and the cURL library to be installed on the server. Additionally, an API key for OpenAI's GPT-3 language model is required to use the script.
 
 **Working Demo**
+
 A working demo can be found <a href="https://tailoredexperiments.com/auto_vignette/">here</a>.
